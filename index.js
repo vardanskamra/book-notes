@@ -24,7 +24,7 @@ db.connect();
 let books=[{id: 1, title: "Can't Hurt Me", author: "David Goggins", rating: 5, review: "If you're someone who strives to master your mind, I highly recommend Can't Hurt Me as a case study in the measures one man took to master his own mind and achieve uncommon levels of excellence.", date_read: '2024-06-18', isbn: '9781544512273'}];
 
 app.get("/", async (req,res)=>{
-    let result = await db.query("SELECT * FROM library");
+    let result = await db.query("SELECT * FROM library ORDER BY rating DESC");
     books = result.rows;
     res.render("index.ejs", {
         books: books,
@@ -37,7 +37,7 @@ app.get("/admin-login", async (req,res)=>{
 
 app.post("/admin", async (req,res)=>{
     if (req.body.username == process.env.ADMIN_USERNAME && req.body.password == process.env.ADMIN_PASSWORD){
-        let result = await db.query("SELECT * FROM library");
+        let result = await db.query("SELECT * FROM library ORDER BY date_read DESC");
         books = result.rows;
         res.render("admin.ejs", {
         books: books,
@@ -90,7 +90,7 @@ app.get("/edit/:id", async (req, res)=>{
 app.post("/delete/:id", async (req, res)=>{
     try{
         const deleted_title = await db.query("DELETE FROM library WHERE id=$1 RETURNING title", [parseInt(req.params.id)]);
-        console.log("Deleted: ", deleted_title);
+        console.log("Deleted: ", deleted_title.rows[0].title);
         let result = await db.query("SELECT * FROM library");
         books = result.rows;
         res.render("admin.ejs", {

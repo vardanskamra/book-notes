@@ -67,9 +67,13 @@ Book Tracker is a web application designed to help users keep track of the books
 
 ## Usage
 - Home Page: View a list of books and their details.
+![Home Page](images/home_page.png)
 - Admin Login: Access the admin panel to manage book entries.
+![Admin Login](images/admin_login.png)
 - Book Details Page: View detailed information and reviews of a specific book.
+![Book Page](images/book_page.png)
 - Add/Edit Book: Use the forms to add or edit book information.
+![Add Review](images/add_review.png)
 
 ## Contributing
 Contributions are welcome! Please fork the repository and submit a pull request with your proposed changes.

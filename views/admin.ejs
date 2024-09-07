@@ -24,31 +24,52 @@
           </div>
         </div>
       </div>
-      <% if (locals.books){ %>
-      <% books.forEach(book => { %>
-        <div class="container col-xxl-8 px-4 pt-1">
-          <div class="row flex-lg-row-reverse align-items-center g-5 py-4">
-            <div class="col-10 col-sm-8 col-lg-6">
-              <img src="https://covers.openlibrary.org/b/isbn/<%=book.isbn %>-L.jpg" class="d-block mx-lg-auto img-fluid" alt="<%=book.title %>" width="250" height="300" loading="lazy">
-            </div>
-            <div class="col-lg-6">
-              <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3"><%= book.title %></h1>
-              <h2 class="display-6 text-body-emphasis lh-1 mb-3"><%= book.author %></h2>
-              <p class="lead"><%- (book.review.length > 200 ? book.review.substring(0, 200) + '...' : book.review).replace(/\r\n|\r|\n/g, '<br>') %></p>
-              <p class="lead mb-2">Date Completed: <%= new Date(book.date_read).toLocaleDateString('en-GB') %></p>
-              <p class="lead mb-4">Rating: <%= book.rating %>/5</p>
-              <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                <form action="/edit/<%= book.id %>" method="get" style="display:inline;">
-                  <button type="submit" class="btn btn-outline-warning btn-lg px-4">Edit</button>
-                </form>
-                <form action="/delete/<%= book.id %>" method="post" style="display:inline;">
-                  <button type="submit" class="btn btn-outline-danger btn-lg px-4">Delete</button>
-                </form>
+      <% if (locals.books) { %>
+        <% books.forEach(book => { %>
+          <div class="container col-xxl-8 px-4 pt-1">
+            <div class="row flex-lg-row-reverse align-items-center g-5 py-4">
+              <div class="col-10 col-sm-8 col-lg-6">
+                <img src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-L.jpg" class="d-block mx-lg-auto img-fluid" alt="<%= book.title %>" width="250" height="300" loading="lazy">
+              </div>
+              <div class="col-lg-6">
+                <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3"><%= book.title %></h1>
+                <h2 class="display-6 text-body-emphasis lh-1 mb-3"><%= book.author %></h2>
+                <p class="lead"><%- (book.review.length > 200 ? book.review.substring(0, 200) + '...' : book.review).replace(/\r\n|\r|\n/g, '<br>') %></p>
+                <p class="lead mb-2">Date Completed: <%= new Date(book.date_read).toLocaleDateString('en-GB') %></p>
+                <p class="lead mb-4">Rating: <%= book.rating %>/5</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                  <form action="/edit/<%= book.id %>" method="get" style="display:inline;">
+                    <button type="submit" class="btn btn-outline-warning btn-lg px-4">Edit</button>
+                  </form>
+                  <button type="button" class="btn btn-outline-danger btn-lg px-4" data-bs-toggle="modal" data-bs-target="#deleteModal<%= book.id %>">
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      <% }); %>
+  
+          <!-- Modal for Delete Confirmation -->
+          <div class="modal fade" id="deleteModal<%= book.id %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= book.id %>" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="deleteModalLabel<%= book.id %>">Confirm Delete</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Are you sure you want to delete "<%= book.title %>" by <%= book.author %>?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <form action="/delete/<%= book.id %>" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }); %>
       <% } %>
 
       <div class="container">
