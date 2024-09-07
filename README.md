@@ -43,7 +43,33 @@ Book Tracker is a web application designed to help users keep track of the books
    npm install
    ```
 
-3. **Set Up Environment Variables:**
+3. **Set Up Postgres Table:**
+
+    ```sql
+    -- Table: public.library
+
+    -- DROP TABLE IF EXISTS public.library;
+
+    CREATE TABLE IF NOT EXISTS public.library(
+        id integer NOT NULL DEFAULT nextval('library_id_seq'::regclass),
+         title character varying(255) COLLATE pg_catalog."default" NOT NULL,
+        author character varying(255) COLLATE pg_catalog."default",
+        rating integer,
+        review text COLLATE pg_catalog."default",
+        date_read date,
+        isbn character varying(13) COLLATE pg_catalog."default" NOT NULL,
+        CONSTRAINT library_pkey PRIMARY KEY (id),
+        CONSTRAINT library_isbn_key UNIQUE (isbn),
+        CONSTRAINT library_rating_check CHECK (rating >= 1 AND rating <= 5)
+    )
+
+    TABLESPACE pg_default;
+
+    ALTER TABLE IF EXISTS public.library
+        OWNER to postgres;
+    ```
+
+4. **Set Up Environment Variables:**
 
     Create a .env file in the root directory with the following variables:
 
@@ -57,7 +83,7 @@ Book Tracker is a web application designed to help users keep track of the books
     ADMIN_PASSWORD=your_admin_password
     ```
 
-4. **Start the Application:**
+5. **Start the Application:**
 
     ```bash
     npm start
